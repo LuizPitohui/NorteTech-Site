@@ -1,0 +1,63 @@
+from django.contrib import admin
+from .models import CompanySettings, Certification, HomeVideo, OperatingBase, Noticia, CanalContato, CarouselImage
+
+# --- CORREÇÃO AQUI ---
+# Adicionei o @admin.register(CompanySettings) que estava faltando
+@admin.register(CompanySettings)
+class CompanySettingsAdmin(admin.ModelAdmin):
+    """
+    Configuração Global: Impede que o usuário delete a configuração principal
+    para não quebrar o site.
+    """
+    # Adicionei para você ver os dados na lista
+    list_display = ('__str__', 'stats_collaborators', 'stats_vehicles')
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        # Remove o botão "Adicionar" se já existir uma configuração salva
+        return not CompanySettings.objects.exists()
+
+
+@admin.register(Certification)
+class CertificationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_editable = ('order',)  # Permite reordenar os selos direto na lista
+    ordering = ('order',)
+
+
+@admin.register(HomeVideo)
+class HomeVideoAdmin(admin.ModelAdmin):
+    """
+    Gestão do Player de Vídeo da Home.
+    """
+    list_display = ('title', 'is_active', 'created_at')
+    list_editable = ('is_active',) # Permite ativar/desativar rápido
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('title',)
+    
+    # Dica: Como a lógica do Model já desativa os outros vídeos ao ativar um novo,
+    # o admin reflete isso automaticamente.
+
+@admin.register(OperatingBase)
+class OperatingBaseAdmin(admin.ModelAdmin):
+    list_display = ('name', 'city', 'phone', 'order')
+    list_editable = ('order',)
+
+@admin.register(Noticia)
+class NoticiaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'data_criacao')
+    search_fields = ('titulo', 'resumo')
+    # Isso faz a mágica: cria o slug baseado no título automaticamente
+    prepopulated_fields = {"slug": ("titulo",)}
+
+@admin.register(CanalContato)
+class CanalContatoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'conteudo', 'tipo', 'ordem')
+    list_editable = ('ordem',)
+
+@admin.register(CarouselImage)
+class CarouselImageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'is_active')
+    list_editable = ('order', 'is_active')

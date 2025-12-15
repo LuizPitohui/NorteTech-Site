@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Norte Tech{% endblock %} | {{ company_settings.site_title }}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --norte-blue: #002B5C; /* Azul Institucional sugerido */
+            --norte-yellow: #FFD700; /* Amarelo Institucional */
+        }
+        body { font-family: 'Roboto', sans-serif; }
+        h1, h2, h3, .navbar-brand { font-family: 'Montserrat', sans-serif; }
+        
+        .bg-norte-blue { background-color: var(--norte-blue); color: white; }
+        .text-norte-blue { color: var(--norte-blue); }
+        .btn-norte { background-color: var(--norte-yellow); color: var(--norte-blue); font-weight: bold; }
+        .btn-norte:hover { background-color: #e6c200; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-norte-blue py-3 fixed-top">
+        <div class="container">
+            <a class="navbar-brand py-0" href="/">
+                <img src="{% static 'img/logo.png' %}" alt="Norte Tech" height="50">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'about' %}">A Empresa</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'services_list' %}">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'careers_home' %}">Trabalhe Conosco</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'contato_page' %}">Contato</a></li>
+
+                    {% if 'carreiras' in request.path or 'meu-perfil' in request.path %}
+                        
+                        {% if user.is_authenticated %}
+                            <li class="nav-item ms-3">
+                                <a href="#" class="nav-link text-warning position-relative">
+                                    <i class="fas fa-bell fa-lg"></i>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown ms-2">
+                                <a class="nav-link dropdown-toggle text-white fw-bold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    Bem-vindo, {{ user.first_name|default:user.username }}
+                                </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'profile' %}">
+                                                <i class="fas fa-user-circle me-2 text-muted"></i> Meu Perfil
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'candidate_history' %}">
+                                                <i class="fas fa-history me-2 text-muted"></i> Minhas Candidaturas
+                                            </a>
+                                        </li>
+                                        
+                                        <li><hr class="dropdown-divider"></li>
+                                        
+                                        <li>
+                                            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="fas fa-sign-out-alt me-2"></i> Sair
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                            </li>
+
+                        {% else %}
+                            <li class="nav-item ms-3">
+                                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-warning btn-sm fw-bold px-3">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Login Candidato
+                                </a>
+                            </li>
+                        {% endif %} {% endif %} </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"> {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="bg-dark text-white pt-5 pb-4 mt-auto">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase fw-bold text-warning mb-3">Norte Tech</h5>
+                    <p class="small text-white-50">
+                        {{ company_settings.mission|default:"Soluções em energia com segurança e qualidade para a região Norte."|truncatewords:25 }}
+                    </p>
+                    <div class="mt-3">
+                        {% if company_settings.instagram %}
+                            <a href="{{ company_settings.instagram }}" target="_blank" class="text-white me-3 text-decoration-none"><i class="fab fa-instagram fa-lg"></i></a>
+                        {% endif %}
+                        {% if company_settings.linkedin %}
+                            <a href="{{ company_settings.linkedin }}" target="_blank" class="text-white me-3 text-decoration-none"><i class="fab fa-linkedin fa-lg"></i></a>
+                        {% endif %}
+                        {% if company_settings.facebook %}
+                            <a href="{{ company_settings.facebook }}" target="_blank" class="text-white me-3 text-decoration-none"><i class="fab fa-facebook fa-lg"></i></a>
+                        {% endif %}
+                        {% if company_settings.youtube %}
+                            <a href="{{ company_settings.youtube }}" target="_blank" class="text-white text-decoration-none"><i class="fab fa-youtube fa-lg"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase fw-bold text-warning mb-3">Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none hover-white">Início</a></li>
+                        <li class="mb-2"><a href="{% url 'about' %}" class="text-white-50 text-decoration-none hover-white">A Empresa</a></li>
+                        <li class="mb-2"><a href="{% url 'services_list' %}" class="text-white-50 text-decoration-none hover-white">Serviços</a></li>
+                        <li class="mb-2"><a href="{% url 'careers_home' %}" class="text-white-50 text-decoration-none hover-white">Trabalhe Conosco</a></li>
+                        {% if user.is_authenticated %}
+                            <li class="mb-2"><a href="{% url 'profile' %}" class="text-warning text-decoration-none fw-bold">Minha Área</a></li>
+                        {% else %}
+                            <li class="mb-2"><a href="{% url 'login' %}" class="text-white-50 text-decoration-none hover-white">Acesso Candidato</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase fw-bold text-warning mb-3">Contato</h5>
+                    <ul class="list-unstyled small text-white-50">
+                        {% if company_settings.address %}
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-map-marker-alt mt-1 me-3 text-warning"></i>
+                            <span>{{ company_settings.address }}</span>
+                        </li>
+                        {% endif %}
+                        
+                        {% if company_settings.phone %}
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-phone mt-1 me-3 text-warning"></i>
+                            <span>{{ company_settings.phone }}</span>
+                        </li>
+                        {% endif %}
+                        
+                        {% if company_settings.email_contact %}
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-envelope mt-1 me-3 text-warning"></i>
+                            <span>{{ company_settings.email_contact }}</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="mb-4 border-secondary">
+
+            <div class="row align-items-center">
+                <div class="col-md-7 col-lg-8">
+                    <p class="small text-white-50 mb-0">
+                        &copy; {% now "Y" %} <strong>{{ company_settings.site_title|default:"Norte Tech" }}</strong>. Todos os direitos reservados.
+                    </p>
+                </div>
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-end">
+                        <ul class="list-unstyled list-inline mb-0 small">
+                            <li class="list-inline-item"><a href="{% url 'privacidade' %}" class="text-white-50 text-decoration-none">Privacidade</a></li>
+                            <li class="list-inline-item"><span class="text-white-50 mx-2">|</span></li>
+                            <li class="list-inline-item"><a href="#" class="text-white-50 text-decoration-none">Termos</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

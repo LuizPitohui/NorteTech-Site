@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="p-0 bg-dark">
+    <div id="homeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-indicators">
+            {% for img in carousel_images %}
+                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="{{ forloop.counter0 }}" 
+                        class="{% if forloop.first %}active{% endif %}" aria-current="true"></button>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-inner">
+            {% for img in carousel_images %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height: 85vh;">
+                <img src="{{ img.image.url }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="{{ img.title }}">
+                
+                {% if img.title or img.description %}
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 p-4 rounded mb-5 mx-auto" style="max-width: 900px;">
+                    
+                    {% if img.title %}
+                        <h2 class="fw-bold text-center mb-3">{{ img.title }}</h2>
+                    {% endif %}
+                    
+                    {% if img.description %}
+                        <p class="lead mb-0" style="text-align: justify; text-justify: inter-word;">
+                            {{ img.description }}
+                        </p>
+                    {% endif %}
+
+                </div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="carousel-item active" style="height: 85vh;">
+                <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
+                    <div class="text-center">
+                        <h1>Bem-vindo à Norte Tech</h1>
+                        <p>Cadastre imagens no Painel Admin</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Próximo</span>
+        </button>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="text-norte-blue fw-bold text-uppercase">Últimas Notícias</h2>
+                <div style="width: 60px; height: 3px; background-color: var(--norte-yellow); margin: 10px auto;"></div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {% for noticia in noticias %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm hover-up">
+                    <div class="position-relative overflow-hidden" style="height: 200px;">
+                        {% if noticia.imagem %}
+                            <img src="{{ noticia.imagem.url }}" class="card-img-top w-100 h-100" style="object-fit: cover;" alt="{{ noticia.titulo }}">
+                        {% else %}
+                            <div class="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
+                                <i class="fas fa-newspaper fa-2x"></i>
+                            </div>
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 bg-warning text-dark px-2 py-1 small fw-bold rounded-start mt-2">
+                            {{ noticia.data_criacao|date:"d/m" }}
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold text-norte-blue fs-6">{{ noticia.titulo|truncatechars:50 }}</h5>
+                        <p class="card-text text-muted small flex-grow-1">{{ noticia.resumo|truncatechars:90 }}</p>
+                        <a href="{% url 'noticia_detail' noticia.slug %}" class="btn btn-outline-primary btn-sm w-100 mt-2 rounded-pill stretched-link">
+                            Ler Mais <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <a href="{% url 'todas_noticias' %}" class="btn btn-outline-primary px-4 py-2 rounded-pill fw-bold">Ver Todas as Notícias</a>
+            </div>
+        </div>
+</section>
+
+<section class="bg-black py-0 position-relative video-section" style="height: 500px; overflow: hidden;">
+    {% if video %}
+    <section class="py-5 bg-light" id="sobre-nos">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-norte-blue mb-4 text-uppercase">Sobre a Norte Tech</h3>
+                    
+                    <div class="text-muted" style="text-align: justify; line-height: 1.8;">
+                        {% if video.about_text %}
+                            {{ video.about_text|linebreaks }}
+                        {% else %}
+                            <p>Texto institucional não cadastrado.</p>
+                        {% endif %}
+                    </div>
+
+                    <a href="{% url 'about' %}" class="btn btn-norte mt-4 fw-bold shadow-sm">
+                        Conheça Nossa História
+                    </a>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="ratio ratio-16x9 shadow-lg rounded overflow-hidden border border-4 border-white">
+                        <video controls controlsList="nodownload" poster="{% static 'img/video-poster.jpg' %}">
+                            <source src="{{ video.video_file.url }}" type="video/mp4">
+                            Seu navegador não suporta vídeos HTML5.
+                        </video>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    {% endif %}
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilo para Efeito Hover nas notícias */
+    .hover-up { transition: transform 0.3s ease; }
+    .hover-up:hover { transform: translateY(-5px); }
+
+    /* Estilos do Vídeo Blur */
+    .video-blur-overlay {
+        background: rgba(0, 0, 0, 0.4); /* Escurece um pouco */
+        backdrop-filter: blur(15px); /* O efeito de embaçado */
+        transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    
+    .video-blur-overlay.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none; /* Deixa clicar no vídeo depois que sumir */
+    }
+
+    .text-shadow { text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
+    
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: scale(1.05); }
+</style>
+
+<script>
+    function playVideo() {
+        const video = document.getElementById('institutionalVideo');
+        const overlay = document.getElementById('videoOverlay');
+
+        // 1. Some com o blur suavemente
+        overlay.classList.add('hidden');
+
+        // 2. Inicia o vídeo com som
+        video.muted = false;
+        video.currentTime = 0; // Reinicia (opcional)
+        video.play();
+        
+        // 3. Adiciona controles para o usuário poder pausar depois
+        video.setAttribute('controls', 'controls');
+    }
+</script>
+{% endblock %}

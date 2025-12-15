@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}A Empresa{% endblock %}
+
+{% block content %}
+
+<div class="bg-norte-blue text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Nossa História e Estrutura</h1>
+        <p class="lead">Excelência e inovação no setor elétrico desde 2019.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <h2 class="text-norte-blue fw-bold mb-3">Quem Somos</h2>
+            
+            <div class="text-muted text-justify" style="text-align: justify;">
+               {% if settings.about_text %}
+                    {{ settings.about_text|linebreaks }}
+               {% else %}
+                    <p>A Norte Tech surge em um momento de mudanças no mercado de energia elétrica no estado do Amazonas. Foi fundada em 1º de julho de 2019 com o objetivo e a responsabilidade de manter o fornecimento contínuo de energia elétrica.</p>
+               {% endif %}
+            </div>
+            
+            <div class="row mt-4 text-center">
+                <div class="col-6 mb-3">
+                    <div class="p-3 border rounded shadow-sm bg-light h-100">
+                        <h3 class="text-norte-blue fw-bold display-6">
+                            {{ settings.stats_collaborators|default:"3.500+" }}
+                        </h3>
+                        <small class="text-uppercase fw-bold text-muted">Colaboradores</small>
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="p-3 border rounded shadow-sm bg-light h-100">
+                        <h3 class="text-warning fw-bold display-6 text-dark">
+                            {{ settings.stats_vehicles|default:"1.150+" }}
+                        </h3>
+                        <small class="text-uppercase fw-bold text-muted">Veículos na Frota</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="ratio ratio-4x3 rounded overflow-hidden shadow">
+                 {% if settings.about_image %}
+                    <img src="{{ settings.about_image.url }}" alt="Sobre a Norte Tech" style="object-fit: cover;">
+                 {% else %}
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop" alt="Frota Norte Tech" style="object-fit: cover;">
+                 {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3 text-norte-blue"><i class="fas fa-bullseye fa-3x"></i></div>
+                        <h4 class="card-title fw-bold">Missão</h4>
+                        <p class="card-text">{{ settings.mission|default:"Garantir energia com qualidade..." }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3 text-norte-blue"><i class="fas fa-eye fa-3x"></i></div>
+                        <h4 class="card-title fw-bold">Visão</h4>
+                        <p class="card-text">{{ settings.vision|default:"Ser referência no setor elétrico..." }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3 text-norte-blue"><i class="fas fa-gem fa-3x"></i></div>
+                        <h4 class="card-title fw-bold">Valores</h4>
+                        <p class="card-text">{{ settings.values|default:"Segurança, Ética e Inovação." }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-norte-blue fw-bold">Nossas Bases Operacionais</h2>
+            <div style="width: 60px; height: 3px; background-color: var(--norte-yellow); margin: 10px auto;"></div>
+            <p>Presença estratégica para atender com agilidade.</p>
+        </div>
+
+        <div class="row">
+            {% for base in bases %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    {% if base.image %}
+                    <img src="{{ base.image.url }}" class="card-img-top" alt="{{ base.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-map-marker-alt fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-norte-blue">{{ base.name }}</h5>
+                        <p class="card-text mb-1"><i class="fas fa-map-pin text-warning me-2"></i> {{ base.address }}</p>
+                        <p class="card-text text-muted small ms-4">{{ base.city }}</p>
+                        
+                        {% if base.phone %}
+                        <p class="card-text"><i class="fas fa-phone text-warning me-2"></i> {{ base.phone }}</p>
+                        {% endif %}
+                    </div>
+                    {% if base.map_link %}
+                    <div class="card-footer bg-white border-top-0 pb-3">
+                        <a href="{{ base.map_link }}" target="_blank" class="btn btn-outline-primary w-100 btn-sm">Ver no Google Maps</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>Nenhuma base cadastrada no momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hover-effect { transition: transform 0.3s; }
+    .hover-effect:hover { transform: translateY(-5px); }
+</style>
+{% endblock %}
