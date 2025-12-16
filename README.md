@@ -1,106 +1,132 @@
-# Norte-tech-Site# Norte Tech - Portal Corporativo
+# ⚡ Norte Tech - Portal Corporativo & Sistema de Admissão Digital
 
-Este é o repositório oficial do portal web da **Norte Tech**, desenvolvido para gerenciar a presença digital da empresa, portfólio de serviços, notícias e processos seletivos.
+Este projeto é uma solução web integrada desenvolvida com **Django** que une um **Site Institucional Moderno** a um **Portal de Recrutamento e Seleção (ATS)** completo.
 
-O sistema foi construído utilizando **Django 6.0** e **Python 3.14**, com foco em uma arquitetura modular e escalável.
-
-## 🚀 Funcionalidades Principais
-
-### 1. Institucional (`core`)
-* **Home Dinâmica:** Banner de vídeo (Hero), Destaques e Últimas Notícias.
-* **Gestão de Conteúdo:** Textos institucionais ("Quem Somos", Missão, Visão, Valores) editáveis via Painel Administrativo.
-* **Notícias:** Sistema completo de postagens com slug automático e editor de conteúdo.
-* **Fale Conosco:** Formulário de contato que salva leads no banco de dados.
-
-### 2. Portfólio de Serviços (`services`)
-* Listagem de serviços categorizados.
-* Página de detalhes de cada serviço.
-* **API REST:** Endpoint (`/api/v1/servicos/`) para integração externa.
-
-### 3. Área de Carreiras (`careers` & `accounts`)
-* **Banco de Talentos:** Cadastro de usuários e currículos.
-* **Gestão de Perfil:** Candidatos podem cadastrar Formação, Experiência e Cursos.
-* **Vagas:** O RH publica vagas e os candidatos aplicam com um clique.
-* **Onboarding:** Sistema para envio de documentos digitalizados (RG, CNH, ASO) com status de aprovação pelo RH.
+O sistema permite que a empresa gerencie sua presença digital (notícias, serviços, banners) e todo o fluxo de contratação (vagas, banco de talentos, recebimento de currículos e validação de documentos) através de um painel administrativo personalizado.
 
 ---
 
-## 🛠 Tecnologias Utilizadas
+## 🚀 Tecnologias Utilizadas
 
-* **Backend:** Python 3.14, Django 6.0
-* **API:** Django REST Framework
-* **Banco de Dados:** SQLite (Desenvolvimento)
-* **Gerenciamento de Dependências:** Poetry
-* **Frontend:** HTML5, CSS3, Bootstrap 5
-* **Admin Interface:** Django Jazzmin (Tema personalizado)
+* **Backend:** Python 3.13 + Django 6.0
+* **Frontend:** HTML5, CSS3, JavaScript, Bootstrap 5 (Responsivo)
+* **Gerenciador de Pacotes:** Poetry
+* **Banco de Dados:** SQLite (Dev) / PostgreSQL (Prod - Recomendado)
+* **Ícones:** FontAwesome 6
 
 ---
 
-## ⚙️ Como Rodar o Projeto Localmente
+## 🛠 Funcionalidades Principais
+
+### 🌐 Módulo Institucional (Site)
+* **Home Dinâmica:**
+    * **Carrossel de Banners:** Gerenciável via Admin (Imagem + Título + Texto Justificado).
+    * **Seção Sobre Nós:** Vídeo institucional e texto descritivo lado a lado.
+    * **Últimas Notícias:** Feed automático das postagens recentes.
+* **A Empresa:**
+    * **Estatísticas Editáveis:** Números de Colaboradores e Frota editáveis via Admin (`CompanySettings`).
+    * **Cultura:** Exibição de Missão e Valores (Campo "Visão" removido conforme diretriz 12/2025).
+    * **Bases Operacionais:** Mapa e lista de endereços.
+* **Serviços:** Catálogo de serviços prestados pela Norte Tech.
+* **LGPD:** Página de Privacidade e Termos de Uso.
+
+### 💼 Módulo Carreiras (Candidato)
+* **Portal do Candidato:**
+    * Cadastro e Login seguro.
+    * **Perfil Completo:** Dados pessoais, currículo (PDF), formação e experiências.
+    * **Minhas Candidaturas:** Dashboard visual com barra de progresso (timeline) do status de cada vaga.
+* **Vagas & Banco de Talentos:**
+    * Busca de vagas abertas.
+    * **Aplicação Unificada:** Fluxo para aplicar em vaga específica ou deixar currículo no Banco de Talentos.
+    * **Checkbox LGPD:** Aceite obrigatório dos termos antes de aplicar.
+* **Onboarding Digital:**
+    * Upload de documentos admissionais (RG, CPF, Comprovante de Residência).
+    * Feedback visual de status (Em análise, Aprovado, Rejeitado).
+
+### 📊 Módulo Gestão (RH & Admin)
+* **Dashboard RH (`/rh/`):**
+    * Painel exclusivo separado do Admin técnico.
+    * Métricas em tempo real: Funil de contratação, Vagas abertas, Total de candidatos.
+* **Gestão de Candidatos:**
+    * Visualização de currículos.
+    * Mudança de status (Novo -> Entrevista -> Contratado).
+    * Validação de documentos (Aprovar/Rejeitar com motivo).
+* **Gestão de Conteúdo (CMS):**
+    * Controle total de textos, banners, vídeos e configurações da empresa sem tocar em código.
+
+---
+
+## ⚙️ Como Rodar o Projeto
 
 ### Pré-requisitos
-* Python 3.14+
-* [Poetry](https://python-poetry.org/)
-### Passo a Passo
+* Python 3.10+
+* Poetry (Recomendado)
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/seu-usuario/norte-tech-portal.git](https://github.com/seu-usuario/norte-tech-portal.git)
-    cd norte-tech-portal
-    ```
+### 1. Clonar e Instalar Dependências
 
-2.  **Instale as dependências:**
-    ```bash
-    poetry install
-    ```
+```bash
+# Clone o repositório
+git clone [https://github.com/seu-usuario/norte-tech-portal.git](https://github.com/seu-usuario/norte-tech-portal.git)
+cd norte-tech-portal
 
-3.  **Ative o ambiente virtual:**
-    ```bash
-    poetry shell
-    ```
+# Instale as dependências via Poetry
+poetry install
+poetry shell
 
-4.  **Execute as migrações do banco de dados:**
-    ```bash
-    python manage.py migrate
-    ```
+2. Configurar o Banco de Dados
+Bash
 
-5.  **Crie um superusuário (para acessar o Admin):**
-    ```bash
-    python manage.py createsuperuser
-    ```
+# Crie as migrações iniciais
+python manage.py makemigrations
+python manage.py migrate
+3. Criar Superusuário (Admin)
+Bash
 
-6.  **Inicie o servidor:**
-    ```bash
-    python manage.py runserver
-    ```
+python manage.py createsuperuser
+# Siga as instruções para criar login e senha
+4. Rodar o Servidor
+Bash
 
-O projeto estará acessível em: `http://127.0.0.1:8000/`
+python manage.py runserver
+Acesse em: http://127.0.0.1:8000/
 
----
+🔐 Acesso aos Painéis
+O sistema possui duas áreas administrativas distintas:
 
-## 📂 Estrutura do Projeto
+Super Admin (TI/Desenvolvimento):
 
-* `nortetech_site/` - Configurações globais do Django (`settings.py`, `urls.py`).
-* `core/` - Funcionalidades base (Home, Sobre, Notícias, Contato).
-* `services/` - Catálogo de serviços e API.
-* `careers/` - Lógica de vagas e candidaturas.
-* `accounts/` - Gestão de usuários, autenticação e perfil do candidato.
-* `templates/` - Arquivos HTML globais e parciais (Navbar, Footer).
-* `static/` & `media/` - Arquivos estáticos (CSS, Imagens, Uploads).
+URL: /admin/
 
----
+Acesso total a usuários, grupos, permissões e configurações técnicas.
 
-## 🔐 Acesso Administrativo
+Painel do RH (Gestores):
 
-Acesse `http://127.0.0.1:8000/admin/` para gerenciar:
-* Configurações da Empresa (Telefone, Redes Sociais, Textos).
-* Publicar/Editar Notícias.
-* Gerenciar Vagas e ver Candidatos.
-* Aprovar/Reprovar documentos.
+URL: /rh/
 
----
+Interface limpa focada em Vagas, Candidatos e Dashboard de Métricas.
 
-## 👨‍💻 Autor
+📂 Estrutura do Projeto
+Plaintext
 
-Desenvolvido por **Luiz Fernando da Silva Guedes**.
-*Engenharia da Computação - FUCAPI*
+norte-tech-site/
+├── config/             # Configurações globais (settings, urls)
+├── core/               # App Institucional (Home, Sobre, Notícias, Contato)
+├── careers/            # App de Recrutamento (Vagas, Candidatos, RH)
+├── accounts/           # App de Usuários (Login, Registro, Perfil)
+├── services/           # App de Serviços
+├── templates/          # Arquivos HTML
+│   ├── admin/          # Customizações do Dashboard RH
+│   ├── accounts/       # Telas de Login/Perfil
+│   └── ...
+├── static/             # CSS, JS, Imagens do sistema
+└── media/              # Uploads de usuários (Currículos, Fotos, Vídeos)
+✅ Histórico de Atualizações Recentes
+Refatoração da Home: Implementação de carrossel Bootstrap 5 e Player de vídeo com overlay removido para layout em Grid.
+
+Sistema de Métricas: Criação do Dashboard visual para o RH.
+
+Ajuste Corporativo: Remoção do campo "Visão" e dinamização dos dados de Frota e Colaboradores via CompanySettings.
+
+Banco de Talentos: Implementação de rota para candidatura espontânea sem vínculo com vaga específica.
+
+Desenvolvido por Luiz Fernando da Silva Guedes.
