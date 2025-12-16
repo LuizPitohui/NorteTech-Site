@@ -11,7 +11,6 @@ class CompanySettings(models.Model):
     # Institucional
     about_text = models.TextField("Texto 'Quem Somos'", default="A Norte Tech é referência na prestação de serviços...", help_text="Texto principal da página A Empresa")
     mission = models.TextField("Missão", default="Garantir a satisfação de nossos clientes...", help_text="Texto da página 2 do Portfólio")
-    vision = models.TextField("Visão", default="Ser reconhecida como a melhor prestadora...", help_text="Texto da página 2 do Portfólio")
     values = models.TextField("Valores", default="Valorização e respeito à vida; Segurança...", help_text="Texto da página 2 do Portfólio")
     
     # Contato (Baseado na página 9 e 42 do PDF)
